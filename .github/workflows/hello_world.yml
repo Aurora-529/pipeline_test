@@ -1,0 +1,11 @@
+name: Hello World # Workflow（工作流）的名称，会显示在 GitHub Actions 页面上
+
+on: push # Event（触发事件）：当任意分支有代码推送时自动触发
+
+jobs: # 定义任务列表
+  say-hello: # Job（作业）的唯一 ID
+    name: 打印问候语 # Job 的显示名称（可选）
+    runs-on: ubuntu-latest # Runner（运行器）：指定在 GitHub 提供的最新版 Ubuntu 虚拟机上执行
+    steps: # Step（步骤）：该 Job 下按顺序执行的具体操作
+      - name: 打印消息 
+        run: echo "Hello, GitHub Actions！" # Run：直接执行 Shell 命令
