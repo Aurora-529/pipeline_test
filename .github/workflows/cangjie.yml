@@ -2,7 +2,7 @@
 
 name: Cangjie
 
-on: push 
+on: workflow_dispatch 
 
 jobs:
 
