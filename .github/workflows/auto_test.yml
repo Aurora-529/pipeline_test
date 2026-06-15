@@ -42,7 +42,6 @@ jobs:
         
         # 5. 执行编译和测试命令
         cjc --version
-        cd repo_workspace
         cjpm update
         cjpm build
         cjpm test
