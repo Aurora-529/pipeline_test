@@ -65,7 +65,7 @@ public func runPipeline(arr: Array<Int64>, threshold: Int64, factor: Int64): Arr
         match (filtered) {
             case Some(v) =>
                 let mapped = mapper.process(v)
-                results.add(mapped)
+                results.append(mapped)
             case None => ()
         }
     }

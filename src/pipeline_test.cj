@@ -61,7 +61,7 @@ func testFilterThenMap() {
 
     for (x in [-5, 0, 1, 10]) {
         match (filter.process(x)) {
-            case Some(v) => results.add(mapper.process(v))
+            case Some(v) => results.append(mapper.process(v))
             case None => ()
         }
     }
