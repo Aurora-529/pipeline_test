@@ -16,14 +16,16 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Download and Extract Cangjie
+    - name: Setup Cangjie & Run Tests
       run: |
-        wget "https://cangjie-lang.cn/v1/files/auth/downLoad?nsId=142267&fileName=Cangjie-0.53.13-linux_x64.tar.gz&objectKey=6719f1eb3af6947e3c6af327" -q -O Cangjie-0.53.13-linux_x64.tar.gz
+        # 1. 下载并解压 Cangjie 编译器
+        wget "https://cangjie-lang.cn/v1/files/auth/downLoad?nsId=142267&fileName=Cangjie-0.53.13-linux_x64.tar.gz&objectKey=6719f1eb3af6947e3c6af327" -q -O Cangj
         tar -xzf Cangjie-0.53.13-linux_x64.tar.gz
 
-    - name: Setup and Test
-      run: |
-        . cangjie/envsetup.sh
+        # 2. 配置环境变量 (注意点号和路径前的空格)
+        . $GITHUB_WORKSPACE/cangjie/envsetup.sh
+
+        # 3. 执行编译和测试命令
         cjc --version
         cd repo_workspace
         cjpm update
