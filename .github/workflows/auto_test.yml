@@ -1,45 +1,31 @@
-# auto_test.yml
-
 name: "Auto Test"
 
 on:
   push:
-    branches: [ "main" ]
+    branches: 
+      - "master"
   pull_request:
-    branches: [ "main" ]
+    branches: 
+      - "master"
 
 jobs:
   test:
-    # 1. 修改为 GitHub 官方支持的 Ubuntu 运行器
-    runs-on: ubuntu-latest 
-    
+    runs-on: ubuntu-latest
+
     steps:
-      # 2. 下载并解压仓颉编译器
-      - name: Download Cangjie Compiler
-        run: |
-          wget "https://cangjie-lang.cn/v1/files/auth/downLoad?nsId=142267&fileName=Cangjie-0.53.13-linux_x64.tar.gz&objectKey=6719f1eb3af6947e3c6af327" -q -O Cangjie-0.53.13-linux_x64.tar.gz 
-          tar -xzf Cangjie-0.53.13-linux_x64.tar.gz
+    - name: Checkout code
+      uses: actions/checkout@v4
 
-      # 3. 使用正确的官方 checkout Action
-      - name: Checkout Code
-        uses: actions/checkout@v4
+    - name: Download and Extract Cangjie
+      run: |
+        wget "https://cangjie-lang.cn/v1/files/auth/downLoad?nsId=142267&fileName=Cangjie-0.53.13-linux_x64.tar.gz&objectKey=6719f1eb3af6947e3c6af327" -q -O Cangjie-0.53.13-linux_x64.tar.gz
+        tar -xzf Cangjie-0.53.13-linux_x64.tar.gz
 
-      # 4. 执行测试命令，使用绝对路径避免环境变量问题
-       
-      - name: Run Tests
-        run: |
-          # 1. 【关键】直接将 bin 目录追加到 PATH 环境变量中，绕过 envsetup.sh
-          export PATH=$GITHUB_WORKSPACE/Cangjie-0.53.13-linux_x64/bin:$PATH
-          
-          # 2. 验证编译器是否可用
-          cjc --version
-          
-          # 3. 查看当前工作区文件（确认 cjpm.yaml 是否存在）
-          echo "Current workspace files:"
-          ls -la
-          
-          # 4. 执行构建和测试
-          # 注意：如果你的 cjpm.yaml 不在根目录，请在这里加上 cd <你的项目文件夹>
-          cjpm update
-          cjpm build
-          cjpm test
+    - name: Setup and Test
+      run: |
+        . cangjie/envsetup.sh
+        cjc --version
+        cd repo_workspace
+        cjpm update
+        cjpm build
+        cjpm test
