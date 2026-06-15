@@ -25,11 +25,21 @@ jobs:
         uses: actions/checkout@v4
 
       # 4. 执行测试命令，使用绝对路径避免环境变量问题
+       
       - name: Run Tests
         run: |
-          . $GITHUB_WORKSPACE/cangjie/envsetup.sh
+          # 1. 【关键】直接将 bin 目录追加到 PATH 环境变量中，绕过 envsetup.sh
+          export PATH=$GITHUB_WORKSPACE/Cangjie-0.53.13-linux_x64/bin:$PATH
+          
+          # 2. 验证编译器是否可用
           cjc --version
-          cd repo_workspace
+          
+          # 3. 查看当前工作区文件（确认 cjpm.yaml 是否存在）
+          echo "Current workspace files:"
+          ls -la
+          
+          # 4. 执行构建和测试
+          # 注意：如果你的 cjpm.yaml 不在根目录，请在这里加上 cd <你的项目文件夹>
           cjpm update
           cjpm build
           cjpm test
