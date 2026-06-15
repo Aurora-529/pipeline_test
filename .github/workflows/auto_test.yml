@@ -18,14 +18,29 @@ jobs:
 
     - name: Setup Cangjie & Run Tests
       run: |
-        # 1. 下载并解压 Cangjie 编译器
-        wget "https://cangjie-lang.cn/v1/files/auth/downLoad?nsId=142267&fileName=Cangjie-0.53.13-linux_x64.tar.gz&objectKey=6719f1eb3af6947e3c6af327" -q -O Cangj
+        # 切换到工作区根目录
+        cd $GITHUB_WORKSPACE
+        
+        # 1. 下载 Cangjie 编译器并增加错误检查
+        echo "Downloading Cangjie compiler..."
+        wget "https://cangjie-lang.cn/v1/files/auth/downLoad?nsId=142267&fileName=Cangjie-0.53.13-linux_x64.tar.gz&objectKey=6719f1eb3af6947e3c6af327" -q -O Cangjie-0.53.13-linux_x64.tar.gz || { echo "Download failed!"; exit 1; }
+        
+        # 2. 验证文件是否存在且大小大于0
+        if [ ! -s Cangjie-0.53.13-linux_x64.tar.gz ]; then
+          echo "Error: Downloaded file is missing or empty."
+          ls -la
+          exit 1
+        fi
+        
+        # 3. 解压文件
+        echo "Extracting Cangjie compiler..."
         tar -xzf Cangjie-0.53.13-linux_x64.tar.gz
-
-        # 2. 配置环境变量 (注意点号和路径前的空格)
+        
+        # 4. 配置环境变量
+        echo "Setting up environment..."
         . $GITHUB_WORKSPACE/cangjie/envsetup.sh
-
-        # 3. 执行编译和测试命令
+        
+        # 5. 执行编译和测试命令
         cjc --version
         cd repo_workspace
         cjpm update
