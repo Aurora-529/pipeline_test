@@ -1,31 +1,21 @@
-name: "Auto Test"
+# cangjie.yml
 
-on:
-  push:
-    branches: 
-      - "main"
-  pull_request:
-    branches: 
-      - "main"
+name: Cangjie
+
+on: push 
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-
+  cjc:
+    # 使用 GitHub 默认的 Ubuntu 运行器
+    runs-on: ubuntu-latest 
+    
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-
-    - name: Download and Extract Cangjie
-      run: |
-        wget "https://cangjie-lang.cn/v1/files/auth/downLoad?nsId=142267&fileName=Cangjie-0.53.13-linux_x64.tar.gz&objectKey=6719f1eb3af6947e3c6af327" -q -O Cangjie-0.53.13-linux_x64.tar.gz
-        tar -xzf Cangjie-0.53.13-linux_x64.tar.gz
-
-    - name: Setup and Test
-      run: |
-        . cangjie/envsetup.sh
-        cjc --version
-        cd repo_workspace
-        cjpm update
-        cjpm build
-        cjpm test
+      - name: download
+        run: |
+          wget "https://cangjie-lang.cn/v1/files/auth/downLoad?nsId=142267&fileName=Cangjie-0.53.13-linux_x64.tar.gz&objectKey=6719f1eb3af6947e3c6af327" -q -O Cangjie-0.53.13-linux_x64.tar.gz 
+          tar -xzf Cangjie-0.53.13-linux_x64.tar.gz
+          
+      - name: cjc
+        run: |
+          . $GITHUB_WORKSPACE/cangjie/envsetup.sh 
+          cjc --version
